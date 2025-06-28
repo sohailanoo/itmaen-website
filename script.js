@@ -1,152 +1,154 @@
 // التنقل السلس
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
     // التنقل السلس بين الأقسام
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll(".nav-link");
     
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener("click", function(e) {
             e.preventDefault();
             
             // إزالة الكلاس النشط من جميع الروابط
-            navLinks.forEach(l => l.classList.remove('active'));
+            navLinks.forEach(l => l.classList.remove("active"));
             
             // إضافة الكلاس النشط للرابط المضغوط
-            this.classList.add('active');
+            this.classList.add("active");
             
             // الحصول على الهدف
-            const target = document.querySelector(this.getAttribute('href'));
+            const target = document.querySelector(this.getAttribute("href"));
             
             if (target) {
                 // التمرير السلس
                 target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                    behavior: "smooth",
+                    block: "start"
                 });
             }
         });
     });
 
     // تفعيل الرابط النشط حسب موقع التمرير
-    window.addEventListener('scroll', function() {
-        let current = '';
-        const sections = document.querySelectorAll('section');
+    window.addEventListener("scroll", function() {
+        let current = "";
+        const sections = document.querySelectorAll("section");
         
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
             
             if (pageYOffset >= sectionTop - 200) {
-                current = section.getAttribute('id');
+                current = section.getAttribute("id");
             }
         });
 
         navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + current) {
+                link.classList.add("active");
             }
         });
     });
 
     // قائمة الهامبرغر للهواتف المحمولة
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav-menu");
 
     if (hamburger && navMenu) {
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+        hamburger.addEventListener("click", function() {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
         });
 
         // إغلاق القائمة عند النقر على رابط
         navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+            link.addEventListener("click", function() {
+                hamburger.classList.remove("active");
+                navMenu.classList.remove("active");
             });
         });
     }
 
-    // تأثيرات التمرير
+    // تأثيرات التمرير (Intersection Observer)
     const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: "0px 0px -50px 0px"
     };
 
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
+                entry.target.classList.add("visible");
+            } else {
+                entry.target.classList.remove("visible"); // لإعادة التحريك عند التمرير لأعلى
             }
         });
     }, observerOptions);
 
     // مراقبة العناصر للتحريك
-    const animateElements = document.querySelectorAll('.content-card, .social-card, .contact-item');
+    const animateElements = document.querySelectorAll(".content-card, .social-card, .contact-item, .video-wrapper, .hero-text, .hero-image");
     animateElements.forEach(el => {
         observer.observe(el);
     });
 
     // زر الدعوة للعمل
-    const ctaButton = document.querySelector('.cta-button');
+    const ctaButton = document.querySelector(".cta-button");
     if (ctaButton) {
-        ctaButton.addEventListener('click', function() {
-            document.querySelector('#content').scrollIntoView({
-                behavior: 'smooth'
+        ctaButton.addEventListener("click", function() {
+            document.querySelector("#content").scrollIntoView({
+                behavior: "smooth"
             });
         });
     }
 
     // أزرار البطاقات
-    const cardButtons = document.querySelectorAll('.card-button');
+    const cardButtons = document.querySelectorAll(".card-button");
     cardButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener("click", function() {
             // يمكن إضافة وظائف مخصصة هنا
-            alert('سيتم توجيهك إلى المحتوى قريباً!');
+            alert("سيتم توجيهك إلى المحتوى قريباً!");
         });
     });
 
     // نموذج الاتصال
-    const contactForm = document.querySelector('.contact-form form');
+    const contactForm = document.querySelector(".contact-form form");
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener("submit", function(e) {
             e.preventDefault();
             
             // الحصول على البيانات
             const formData = new FormData(this);
-            const name = this.querySelector('input[type="text"]').value;
-            const email = this.querySelector('input[type="email"]').value;
-            const message = this.querySelector('textarea').value;
+            const name = this.querySelector("input[type=\"text\"]").value;
+            const email = this.querySelector("input[type=\"email\"]").value;
+            const message = this.querySelector("textarea").value;
             
             if (name && email && message) {
                 // عرض رسالة نجاح
-                alert('شكراً لك! تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.');
+                alert("شكراً لك! تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.");
                 
                 // إعادة تعيين النموذج
                 this.reset();
             } else {
-                alert('يرجى ملء جميع الحقول المطلوبة.');
+                alert("يرجى ملء جميع الحقول المطلوبة.");
             }
         });
     }
 
     // تأثيرات إضافية للبطاقات
-    const cards = document.querySelectorAll('.content-card, .social-card');
+    const cards = document.querySelectorAll(".content-card, .social-card");
     cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
+        card.addEventListener("mouseenter", function() {
+            this.style.transform = "translateY(-10px) scale(1.02)";
         });
         
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
+        card.addEventListener("mouseleave", function() {
+            this.style.transform = "translateY(0) scale(1)";
         });
     });
 
     // تأثير الكتابة للعنوان الرئيسي
-    const heroTitle = document.querySelector('.hero-title');
+    const heroTitle = document.querySelector(".hero-title");
     if (heroTitle) {
         const text = heroTitle.textContent;
-        heroTitle.textContent = '';
+        heroTitle.textContent = "";
         
         let i = 0;
         const typeWriter = function() {
@@ -163,22 +165,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // تأثير الجسيمات في الخلفية
     function createParticle() {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
+        const particle = document.createElement("div");
+        particle.className = "particle";
         particle.style.cssText = `
             position: absolute;
             width: 4px;
             height: 4px;
-            background: rgba(255, 215, 0, 0.6);
+            background: rgba(194, 178, 128, 0.6); /* لون بيج/بني فاتح */
             border-radius: 50%;
             pointer-events: none;
             animation: float-particle 8s linear infinite;
         `;
         
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.left = Math.random() * 100 + "%";
+        particle.style.animationDelay = Math.random() * 8 + "s";
         
-        document.querySelector('.hero').appendChild(particle);
+        document.querySelector(".hero").appendChild(particle);
         
         // إزالة الجسيم بعد انتهاء الحركة
         setTimeout(() => {
@@ -193,17 +195,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // إضافة تأثير التمرير للهيدر
     let lastScrollTop = 0;
-    const header = document.querySelector('.header');
+    const header = document.querySelector(".header");
     
-    window.addEventListener('scroll', function() {
+    window.addEventListener("scroll", function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
         if (scrollTop > lastScrollTop && scrollTop > 100) {
             // التمرير لأسفل
-            header.style.transform = 'translateY(-100%)';
+            header.style.transform = "translateY(-100%)";
         } else {
             // التمرير لأعلى
-            header.style.transform = 'translateY(0)';
+            header.style.transform = "translateY(0)";
         }
         
         lastScrollTop = scrollTop;
@@ -211,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // إضافة الأنماط للجسيمات
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
     @keyframes float-particle {
         0% {
